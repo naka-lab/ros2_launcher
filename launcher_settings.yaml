@@ -1,0 +1,26 @@
+general:
+  - name: test
+    command: 
+    option: ""
+
+
+Stretch:
+  - name: Strechキャリブレーション
+    command: stretch_free_robot_process.py &  stretch_robot_home.py
+    option: ""
+  - name: Stretchドライバー
+    command: ros2 launch stretch_core stretch_driver.launch.py
+    option: 
+  - name: SLAM
+    command: ros2 service call /switch_to_navigation_mode std_srvs/srv/Trigger & ros2 launch stretch_nav2 offline_mapping.launch.py
+    option: ""
+  - name: 台車操作
+    command: ros2 service call /switch_to_navigation_mode std_srvs/srv/Trigger & ros2 run teleop_twist_keyboard teleop_twist_keyboard cmd_vel:=stretch/cmd_vel
+    option: 
+  - name: 全身操作
+    command: ros2 service call /switch_to_position_mode std_srvs/srv/Trigger & ros2 run stretch_core keyboard_teleop
+    option:      
+  - name: MAP保存
+    command: ros2 run nav2_map_server map_saver_cli
+    option: -f ${HELLO_FLEET_PATH}/maps/map
+
